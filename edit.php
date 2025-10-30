@@ -17,27 +17,40 @@ if (!isset($_POST['id']) || empty($_POST['id'])) {
 }
 
 $id = $_POST['id'];
-$rows = [];
-$usuarioData = null;
+
+function leerCSV($csvFile, $id) {
+  $rows = [];
+  $usuarioData = null;
 
 
-if (($archivo = fopen($csvFile, 'r')) !== false) {
-    while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-        $rows[] = $data;
-        if ($data[0] == $id) {
-            $usuarioData = $data;
-        }
-    }
-    fclose($archivo);
+  if (($archivo = fopen($csvFile, 'r')) !== false) {
+      while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
+          $rows[] = $data;
+          if ($data[0] == $id) {
+              $usuarioData = $data;
+          }
+      }
+      fclose($archivo);
+  }
+
+
+  if (!$usuarioData) {
+      echo "No se encontró un usuario con el ID indicado.";
+      exit;
+  }
+
+  return array($rows, $usuarioData);
 }
 
+$resultadoCSV = leerCSV($csvFile, $id);
+$rows = $resultadoCSV[0];
+$usuarioData = $resultadoCSV[1];
 
-if (!$usuarioData) {
-    echo "No se encontró un usuario con el ID indicado.";
-    exit;
-}
+leerPost($csvFile, $id, $rows);
 
-if (isset($_POST['usuario']) && isset($_POST['email']) && isset($_POST['rol'])) {
+
+function leerPost($csvFile, $id, $rows) {
+  if (isset($_POST['usuario']) && isset($_POST['email']) && isset($_POST['rol'])) {
     $nuevoUsuario = $_POST['usuario'];
     $nuevoEmail = $_POST['email'];
     $nuevoRol = $_POST['rol'];
@@ -64,6 +77,7 @@ if (isset($_POST['usuario']) && isset($_POST['email']) && isset($_POST['rol'])) 
     
     header('Location: index.php');
     exit;
+  }
 }
 
 
