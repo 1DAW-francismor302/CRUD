@@ -105,7 +105,7 @@ if (($archivo = fopen($csvFile, 'r')) !== false) {
                         <button type='submit' class='btn btn-ver'>Ver Información</button>
                     </form>
                     
-                    <form action='edit.php' method='post'>
+                    <form action='edit.php' method='get'>
                         <input type='hidden' name='id' value='$id'>
                         <button type='submit' class='btn btn-borrar'>Editar Usuario</button>
                     </form>
