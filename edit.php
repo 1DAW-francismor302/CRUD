@@ -11,12 +11,14 @@ function customError($errno, $errstr) {
 
 $csvFile = 'users.csv';
 
-if (!isset($_GET['id']) || empty($_GET['id'])) {
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+} elseif (isset($_POST['id'])) {
+    $id = $_POST['id'];
+} else {
     echo "No se ha especificado el ID del usuario.";
     exit;
 }
-
-$id = $_GET['id'];
 
 function leerCSV($csvFile, $id) {
   $rows = [];
@@ -50,10 +52,10 @@ leerPost($csvFile, $id, $rows);
 
 
 function leerPost($csvFile, $id, $rows) {
-  if (isset($_GET['usuario']) && isset($_GET['email']) && isset($_GET['rol'])) {
-    $nuevoUsuario = $_GET['usuario'];
-    $nuevoEmail = $_GET['email'];
-    $nuevoRol = $_GET['rol'];
+  if (isset($_POST['usuario']) && isset($_POST['email']) && isset($_POST['rol'])) {
+    $nuevoUsuario = $_POST['usuario'];
+    $nuevoEmail = $_POST['email'];
+    $nuevoRol = $_POST['rol'];
 
     
     $nuevosDatos = [];
