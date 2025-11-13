@@ -6,6 +6,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_error_handler("customError");
 
+include_once('./libraries/functions.php');
+
 function customError($errno, $errstr) {
   echo "<b>Error:</b> [$errno] $errstr";
 }
@@ -19,25 +21,37 @@ if (!isset($_POST['id']) || empty($_POST['id'])) {
 
 $idABorrar = $_POST['id'];
 
-$rows = [];
+$usuarios = showBD();
+
 $usuarioEncontrado = false;
-if (($archivo = fopen($csvFile, 'r')) !== false) {
-    while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-        if($data[0] != $idABorrar){
-            $rows[] = $data;
-        }else{
-            $usuarioEncontrado = true;
-        }
-    }
-    fclose($archivo);
+
+foreach ($usuarios as $usuario) {
+  if ($usuario['id'] == $idABorrar) {
+    $usuarioEncontrado = true;
+  }
 }
 
-if (($archivo = fopen($csvFile, 'w')) !== false) {
-    foreach ($rows as $row) {
-        fputcsv($archivo, $row);
-    }
-    fclose($archivo);
-}
+deleteUser($idABorrar);
+
+// $rows = [];
+// $usuarioEncontrado = false;
+// if (($archivo = fopen($csvFile, 'r')) !== false) {
+//     while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
+//         if($data[0] != $idABorrar){
+//             $rows[] = $data;
+//         }else{
+//             $usuarioEncontrado = true;
+//         }
+//     }
+//     fclose($archivo);
+// }
+
+// if (($archivo = fopen($csvFile, 'w')) !== false) {
+//     foreach ($rows as $row) {
+//         fputcsv($archivo, $row);
+//     }
+//     fclose($archivo);
+// }
 
 ?>
 

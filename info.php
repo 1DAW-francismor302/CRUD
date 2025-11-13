@@ -6,6 +6,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_error_handler("customError");
 
+include_once('./libraries/functions.php');
+
 function customError($errno, $errstr) {
   echo "<b>Error:</b> [$errno] $errstr";
 }
@@ -18,17 +20,28 @@ if (!isset($_GET['id']) || empty($_GET['id'])) {
 }
 
 $id = $_GET['id'];
-$usuario = null;
+$usuarios = null;
 
-$rows = [];
-if (($archivo = fopen($csvFile, 'r')) !== false) {
-    while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-        if($data[0] == $id){
-            $usuario = $data;
-        }
-    }
-    fclose($archivo);
+$usuarios = showBD();
+
+$usuarioActual = '';
+
+foreach($usuarios as $usuario){
+  if ($usuario['id'] == $id){
+    $usuarioActual = $usuario;
+  }
+
 }
+
+// $rows = [];
+// if (($archivo = fopen($csvFile, 'r')) !== false) {
+//     while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
+//         if($data[0] == $id){
+//             $usuario = $data;
+//         }
+//     }
+//     fclose($archivo);
+// }
 
 ?>
 <!DOCTYPE html>
@@ -89,9 +102,9 @@ if (($archivo = fopen($csvFile, 'r')) !== false) {
     <?php
       if ($usuario) {
           echo '<h2>Datos del usuario</h2>';
-          echo '<p><strong>Nombre:</strong> ' . $usuario[1] . '</p>';
-          echo '<p><strong>Email:</strong> ' . $usuario[2] . '</p>';
-          echo '<p><strong>Rol:</strong> ' . $usuario[3] . '</p>';
+          echo '<p><strong>Nombre:</strong> ' . $usuarioActual['nombre'] . '</p>';
+          echo '<p><strong>Email:</strong> ' . $usuarioActual['email'] . '</p>';
+          echo '<p><strong>Rol:</strong> ' . $usuarioActual['rol'] . '</p>';
           echo '<a class="btn" href="index.php">Volver</a>';
       } else {
           echo '<h2>No se ha encontrado el usuario</h2>';

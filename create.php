@@ -5,6 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_error_handler("customError");
 
+include_once('./libraries/functions.php');
+
 function dump($var){
   echo '<pre>'.print_r($var,1).'</pre>';
 }
@@ -13,50 +15,57 @@ function customError($errno, $errstr) {
   echo "<b>Error:</b> [$errno] $errstr";
 }
 
-function obtenerFecha(){
-  $fechaAlta= date ("Y-m-d H:i:s");
-  return $fechaAlta;
-}
+// function obtenerFecha(){
+//   $fechaAlta= date ("Y-m-d H:i:s");
+//   return $fechaAlta;
+// }
 
-function obtenerUltimoID() {
-  $file = 'users.csv';
+// function obtenerUltimoID() {
+//   $file = 'users.csv';
   
-  if (file_exists($file) && filesize($file) > 0) {
-    $puntero = fopen($file, "r");
+//   if (file_exists($file) && filesize($file) > 0) {
+//     $puntero = fopen($file, "r");
     
-    $ultimoID = 1;
+//     $ultimoID = 1;
     
-    while (($linea = fgetcsv($puntero)) !== FALSE) {
-        $ultimoID = $linea[0]; 
-    }
+//     while (($linea = fgetcsv($puntero)) !== FALSE) {
+//         $ultimoID = $linea[0]; 
+//     }
     
-    fclose($puntero);
+//     fclose($puntero);
     
-    return $ultimoID + 1;
-  } else {
-    return 1;
-  }
-}
+//     return $ultimoID + 1;
+//   } else {
+//     return 1;
+//   }
+// }
 
-$id = obtenerUltimoID();
-$fechaAlta = obtenerFecha();
+// $id = obtenerUltimoID();
+// $fechaAlta = obtenerFecha();
 
-function leerPost($id, $fechaAlta){
+function leerPost(){
 
   if (!empty($_POST)){
+    
     $usuario = $_POST['usuario'];
     $email = $_POST['email'];
     $rol = $_POST['rol'];
+    $data = array(
+      'usuario' => $usuario,
+      'email' => $email,
+      'rol' => $rol
+    );
+    insertBD($data);
 
-    if (($archivo = fopen("users.csv", 'a+')) !== FALSE) {
-      fwrite($archivo, $id.','.$usuario.','.$email.','.$rol.','.$fechaAlta."\n");
-    }
+    // if (($archivo = fopen("users.csv", 'a+')) !== FALSE) {
+    //   fwrite($archivo, $id.','.$usuario.','.$email.','.$rol.','.$fechaAlta."\n");
+    // }
   }
       
 }
 
-function getFormularioMarkup($id, $fechaAlta) {
-    $output = '<form action="'.leerPost($id, $fechaAlta).'" method="post">
+function getFormularioMarkup() {
+    $output = '<form action="'.leerPost().'" method="post">
     <div class="form-group">
         <label for="exampleInputusername">Nombre de Usuario</label>
         <input type="text" name="usuario" class="form-control" id="exampleInputusername" placeholder="Enter username" required/>
@@ -82,7 +91,7 @@ function getFormularioMarkup($id, $fechaAlta) {
     return $output;
 }
 
-$formularioMarkup = getFormularioMarkup($id, $fechaAlta);
+$formularioMarkup = getFormularioMarkup();
 
 
 ?>
