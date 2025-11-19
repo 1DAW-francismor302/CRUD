@@ -32,6 +32,7 @@ function leerPost(){
 }
 
 leerPost();
+//reiniciarBD();
 
 function getFormularioMarkup() {
     $output = '<form action="create.php" method="post">

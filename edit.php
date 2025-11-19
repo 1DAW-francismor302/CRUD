@@ -53,8 +53,11 @@ function leerPost($id) {
         'rol' => $nuevoRol
       );
 
-      updateUser($id, $nuevosDatos);
-
+      if ($userData['email'] != $nuevosDatos['email']) {
+        updateUser($id, $nuevosDatos);
+      }else {
+        alert("No se puede repetir el email");
+      }
       header('Location: index.php');
       exit;
     }

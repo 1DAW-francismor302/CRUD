@@ -1,34 +1,12 @@
 <?php
 
-$csvFile = 'users.csv';
-
 include_once('./libraries/functions.php');
-
-
-// Verificar que el archivo existe
-if (!file_exists($csvFile)) {
-    die("<h2 style='color:red; text-align:center;'>El archivo users.csv no existe.</h2>");
-}
 
 function dump($var){
   echo '<pre>'.print_r($var,1).'</pre>';
 }
 
-
-// Leer el archivo CSV
-// $rows = [];
-// if (($archivo = fopen($csvFile, 'r')) !== false) {
-//     while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-//         $rows[] = $data;
-//     }
-//     fclose($archivo);
-// }
-
 $usuarios = getUsuarios();
-
-
-
-
 
 ?>
 <!DOCTYPE html>
