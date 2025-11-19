@@ -12,16 +12,13 @@ function customError($errno, $errstr) {
   echo "<b>Error:</b> [$errno] $errstr";
 }
 
-
-$csvFile = 'users.csv';
-
 if (!isset($_POST['id']) || empty($_POST['id'])) {
     echo "No se ha especificado el ID del usuario a borrar.";
 }
 
-$idABorrar = $_POST['id'];
+$idABorrar = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
-$usuarios = showBD();
+$usuarios = getUsuarios();
 
 $usuarioEncontrado = false;
 
@@ -32,26 +29,6 @@ foreach ($usuarios as $usuario) {
 }
 
 deleteUser($idABorrar);
-
-// $rows = [];
-// $usuarioEncontrado = false;
-// if (($archivo = fopen($csvFile, 'r')) !== false) {
-//     while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-//         if($data[0] != $idABorrar){
-//             $rows[] = $data;
-//         }else{
-//             $usuarioEncontrado = true;
-//         }
-//     }
-//     fclose($archivo);
-// }
-
-// if (($archivo = fopen($csvFile, 'w')) !== false) {
-//     foreach ($rows as $row) {
-//         fputcsv($archivo, $row);
-//     }
-//     fclose($archivo);
-// }
 
 ?>
 

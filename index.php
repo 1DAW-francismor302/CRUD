@@ -14,6 +14,7 @@ function dump($var){
   echo '<pre>'.print_r($var,1).'</pre>';
 }
 
+
 // Leer el archivo CSV
 // $rows = [];
 // if (($archivo = fopen($csvFile, 'r')) !== false) {
@@ -23,7 +24,8 @@ function dump($var){
 //     fclose($archivo);
 // }
 
-$usuarios = showBD();
+$usuarios = getUsuarios();
+
 
 
 
@@ -96,34 +98,6 @@ $usuarios = showBD();
     </thead>
     <tbody>
         <?php
-        
-        // foreach ($rows as $row) {
-        //     echo "<tr>";
-        //     foreach ($row as $cell) {
-        //         echo "<td>$cell</td>";
-        //     }
-
-        //     $id = $row[0];
-        //     echo "<td class='acciones'>
-        //             <form action='info.php' method='get'>
-        //                 <input type='hidden' name='id' value='$id'>
-        //                 <button type='submit' class='btn btn-ver'>Ver Información</button>
-        //             </form>
-                    
-        //             <form action='edit.php' method='get'>
-        //                 <input type='hidden' name='id' value='$id'>
-        //                 <button type='submit' class='btn btn-borrar'>Editar Usuario</button>
-        //             </form>
-
-        //             <form action='delete.php' method='post'>
-        //                 <input type='hidden' name='id' value='$id'>
-        //                 <button type='submit' class='btn btn-borrar'>Borrar Usuario</button>
-        //             </form>
-        //           </td>";
-            
-            
-        //     echo "</tr>";
-        // }
         ?>
         <?php foreach ($usuarios as $usuario) : ?>
             <tr>

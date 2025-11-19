@@ -15,57 +15,26 @@ function customError($errno, $errstr) {
   echo "<b>Error:</b> [$errno] $errstr";
 }
 
-// function obtenerFecha(){
-//   $fechaAlta= date ("Y-m-d H:i:s");
-//   return $fechaAlta;
-// }
-
-// function obtenerUltimoID() {
-//   $file = 'users.csv';
-  
-//   if (file_exists($file) && filesize($file) > 0) {
-//     $puntero = fopen($file, "r");
-    
-//     $ultimoID = 1;
-    
-//     while (($linea = fgetcsv($puntero)) !== FALSE) {
-//         $ultimoID = $linea[0]; 
-//     }
-    
-//     fclose($puntero);
-    
-//     return $ultimoID + 1;
-//   } else {
-//     return 1;
-//   }
-// }
-
-// $id = obtenerUltimoID();
-// $fechaAlta = obtenerFecha();
-
 function leerPost(){
 
-  if (!empty($_POST)){
-    
-    $usuario = $_POST['usuario'];
-    $email = $_POST['email'];
-    $rol = $_POST['rol'];
-    $data = array(
-      'usuario' => $usuario,
-      'email' => $email,
-      'rol' => $rol
-    );
-    insertBD($data);
+  if (isset($_POST['crear'])){
 
-    // if (($archivo = fopen("users.csv", 'a+')) !== FALSE) {
-    //   fwrite($archivo, $id.','.$usuario.','.$email.','.$rol.','.$fechaAlta."\n");
-    // }
+    $data = filter_input_array(INPUT_POST,[
+      'usuario' => FILTER_DEFAULT,
+      'email' => FILTER_VALIDATE_EMAIL,
+      'rol' => FILTER_DEFAULT
+    ]);
+
+     if (!empty($data)) {
+      insertBD($data);
+     }
   }
-      
 }
 
+leerPost();
+
 function getFormularioMarkup() {
-    $output = '<form action="'.leerPost().'" method="post">
+    $output = '<form action="create.php" method="post">
     <div class="form-group">
         <label for="exampleInputusername">Nombre de Usuario</label>
         <input type="text" name="usuario" class="form-control" id="exampleInputusername" placeholder="Enter username" required/>
@@ -82,7 +51,7 @@ function getFormularioMarkup() {
         <option value="moderator">Moderador</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary" name="crear">Submit</button>
     </form>
     <br>
     <button class="btn index"><a href="index.php">Volver al índice</a></button>';

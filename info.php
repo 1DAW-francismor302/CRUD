@@ -12,17 +12,15 @@ function customError($errno, $errstr) {
   echo "<b>Error:</b> [$errno] $errstr";
 }
 
-$csvFile = 'users.csv';
-
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     echo "No se ha especificado el ID del usuario.";
     exit;
 }
 
-$id = $_GET['id'];
+$id = filter_input(INPUT_GET,'id', FILTER_VALIDATE_INT);
 $usuarios = null;
 
-$usuarios = showBD();
+$usuarios = getUsuarios();
 
 $usuarioActual = '';
 
@@ -32,16 +30,6 @@ foreach($usuarios as $usuario){
   }
 
 }
-
-// $rows = [];
-// if (($archivo = fopen($csvFile, 'r')) !== false) {
-//     while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-//         if($data[0] == $id){
-//             $usuario = $data;
-//         }
-//     }
-//     fclose($archivo);
-// }
 
 ?>
 <!DOCTYPE html>

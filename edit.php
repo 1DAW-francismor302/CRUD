@@ -5,11 +5,15 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_error_handler("customError");
 
+include_once('./libraries/functions.php');
+
 function customError($errno, $errstr) {
     echo "<b>Error:</b> [$errno] $errstr";
 }
 
-$csvFile = 'users.csv';
+function dump($var){
+  echo '<pre>'.print_r($var,1).'</pre>';
+}
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -20,73 +24,51 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-function leerCSV($csvFile, $id) {
-  $rows = [];
-  $usuarioData = null;
+$usuariosData = getUsuarios();
+$usuarioData = '';
 
-
-  if (($archivo = fopen($csvFile, 'r')) !== false) {
-      while (($data = fgetcsv($archivo, 1000, ',')) !== false) {
-          $rows[] = $data;
-          if ($data[0] == $id) {
-              $usuarioData = $data;
-          }
-      }
-      fclose($archivo);
+foreach ($usuariosData as $usuario) {
+  if ($usuario['id'] == $id) {
+    $usuarioData = $usuario;
   }
+}
 
 
-  if (!$usuarioData) {
-      echo "No se encontró un usuario con el ID indicado.";
+function leerPost($id) {
+  if (isset($_POST['enviar'])) {
+    $userData = filter_input_array(INPUT_POST,[
+      'usuario' => FILTER_DEFAULT,
+      'email' => FILTER_VALIDATE_EMAIL,
+      'rol' => FILTER_DEFAULT
+    ]);
+
+    if (!empty($userData)) {
+      $nuevoUsuario = $userData['usuario'];
+      $nuevoEmail = $userData['email'];
+      $nuevoRol = $userData['rol'];
+
+      $nuevosDatos = array(
+        'nombre' => $nuevoUsuario,
+        'email' => $nuevoEmail,
+        'rol' => $nuevoRol
+      );
+
+      updateUser($id, $nuevosDatos);
+
+      header('Location: index.php');
       exit;
-  }
-
-  return array($rows, $usuarioData);
-}
-
-$resultadoCSV = leerCSV($csvFile, $id);
-$rows = $resultadoCSV[0];
-$usuarioData = $resultadoCSV[1];
-
-leerPost($csvFile, $id, $rows);
-
-
-function leerPost($csvFile, $id, $rows) {
-  if (isset($_POST['usuario']) && isset($_POST['email']) && isset($_POST['rol'])) {
-    $nuevoUsuario = $_POST['usuario'];
-    $nuevoEmail = $_POST['email'];
-    $nuevoRol = $_POST['rol'];
-
-    
-    $nuevosDatos = [];
-    foreach ($rows as $data) {
-        if ($data[0] == $id) {
-            $data[1] = $nuevoUsuario;
-            $data[2] = $nuevoEmail;
-            $data[3] = $nuevoRol;
-        }
-        $nuevosDatos[] = $data;
     }
-
-
-    if (($archivo = fopen($csvFile, 'w')) !== false) {
-        foreach ($nuevosDatos as $data) {
-            fputcsv($archivo, $data);
-        }
-        fclose($archivo);
-    }
-
-    
-    header('Location: index.php');
-    exit;
   }
 }
+
+leerPost($id);
 
 
 function getFormularioMarkup($usuarioData) {
-    $id = $usuarioData[0];
-    $nombre = $usuarioData[1];
-    $email = $usuarioData[2];
+    $id = $usuarioData['id'];
+    $nombre = $usuarioData['nombre'];
+    $email = $usuarioData['email'];
+    $rol = $usuarioData['rol'];
 
     return '
     <form action="edit.php" method="post">
@@ -102,12 +84,12 @@ function getFormularioMarkup($usuarioData) {
         <div class="form-group">
            <label for="roleSelect">Rol</label>
             <select id="roleSelect" name="rol" class="form-control">
-                <option value="admin">Administrador</option>
-                <option value="user">Usuario</option>
-                <option value="moderator">Moderador</option>
+                <option value="admin" '.($rol=='admin'?'selected':'').'>Administrador</option>
+                <option value="user" '.($rol=='user'?'selected':'').'>Usuario</option>
+                <option value="moderator" '.($rol=='moderator'?'selected':'').'>Moderador</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        <button type="submit" class="btn btn-primary" name="enviar">Guardar cambios</button>
     </form>
     <br>
     <button class="btn index"><a href="index.php">Volver al índice</a></button>
