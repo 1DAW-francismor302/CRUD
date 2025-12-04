@@ -5,6 +5,8 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_error_handler("customError");
 
+session_start();
+
 include_once('./libraries/functions.php');
 
 function dump($var){
@@ -29,6 +31,8 @@ function leerPost(){
     if (!empty($data)) {
       insertBD($data);
     }
+
+    $_SESSION['usuario'] = $data['usuario'];
 
     header('Location: usuarios.php');
   }

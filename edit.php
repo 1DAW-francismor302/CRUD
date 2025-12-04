@@ -5,6 +5,15 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 set_error_handler("customError");
 
+session_start();
+
+header("Cache-Control: no-store");
+
+if (!isset($_SESSION['usuario'])) {
+    header("Location: index.php");
+    exit;
+}
+
 include_once('./libraries/functions.php');
 
 function customError($errno, $errstr) {
@@ -176,6 +185,16 @@ $formularioMarkup = getFormularioMarkup($usuarioData);
       text-decoration: none;
     }
   </style>
+
+  <script>
+        // Evita que el navegador cargue la página desde su Back-Forward Cache
+        window.addEventListener("pageshow", function (event) {
+            if (event.persisted) {
+                // Si viene del BFCache (al volver atrás), recarga
+                window.location.reload();
+            }
+        });
+    </script>
 </head>
 <body>
   <div>
