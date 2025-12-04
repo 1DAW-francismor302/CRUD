@@ -17,17 +17,20 @@ function customError($errno, $errstr) {
 
 function leerPost(){
 
-  if (isset($_POST['crear'])){
+  if (isset($_POST['registrarse'])){
 
     $data = filter_input_array(INPUT_POST,[
       'usuario' => FILTER_DEFAULT,
       'email' => FILTER_VALIDATE_EMAIL,
+      'password' => FILTER_DEFAULT,
       'rol' => FILTER_DEFAULT
     ]);
 
-     if (!empty($data)) {
+    if (!empty($data)) {
       insertBD($data);
-     }
+    }
+
+    header('Location: usuarios.php');
   }
 }
 
@@ -45,6 +48,10 @@ function getFormularioMarkup() {
         <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" required/>
     </div>
     <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" name="password" class="form-control" id="password" placeholder="Enter password" required/>
+    </div>
+    <div class="form-group">
         <label for="roleSelect">Rol</label>
         <select id="roleSelect" name="rol" class="form-control">
         <option value="admin">Administrador</option>
@@ -52,10 +59,10 @@ function getFormularioMarkup() {
         <option value="moderator">Moderador</option>
         </select>
     </div>
-    <button type="submit" class="btn btn-primary" name="crear">Submit</button>
+    <button type="submit" class="btn btn-primary" name="registrarse">Registrarse</button>
     </form>
     <br>
-    <button class="btn index"><a href="index.php">Volver al índice</a></button>';
+    <button class="btn"><a href="index.php">Volver al inicio de sesión</a></button>';
 
     
     return $output;
@@ -143,6 +150,13 @@ $formularioMarkup = getFormularioMarkup();
 
     button.btn:hover {
       background-color: #2c3e9e;
+    }
+
+    button a {
+      color: white;
+      text-decoration: none;
+      display: block;
+      width: 100%;
     }
   </style>
 </head>

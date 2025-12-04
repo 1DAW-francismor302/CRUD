@@ -93,7 +93,7 @@ deleteUser($idABorrar);
         ?>
         </h2>
         <botton>
-            <a class = "btn" href="index.php">Volver al índice</a>
+            <a class = "btn" href="usuarios.php">Volver a la lista de usuarios</a>
         </botton>
     </div>    
 

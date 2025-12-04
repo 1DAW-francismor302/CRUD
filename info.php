@@ -93,10 +93,10 @@ foreach($usuarios as $usuario){
           echo '<p><strong>Nombre:</strong> ' . $usuarioActual['nombre'] . '</p>';
           echo '<p><strong>Email:</strong> ' . $usuarioActual['email'] . '</p>';
           echo '<p><strong>Rol:</strong> ' . $usuarioActual['rol'] . '</p>';
-          echo '<a class="btn" href="index.php">Volver</a>';
+          echo '<a class="btn" href="usuarios.php">Volver</a>';
       } else {
           echo '<h2>No se ha encontrado el usuario</h2>';
-          echo '<a class="btn" href="index.php">Volver</a>';
+          echo '<a class="btn" href="usuarios.php">Volver</a>';
       }
     ?>
   </div>

@@ -55,7 +55,7 @@ function leerPost($id) {
 
       updateUser($id, $nuevosDatos);
       
-      header('Location: index.php');
+      header('Location: usuarios.php');
       exit;
     }
   }
@@ -92,7 +92,7 @@ function getFormularioMarkup($usuarioData) {
         <button type="submit" class="btn btn-primary" name="enviar">Guardar cambios</button>
     </form>
     <br>
-    <button class="btn index"><a href="index.php">Volver al índice</a></button>
+    <button class="btn usuarios"><a href="usuarios.php">Volver a la lista de usuarios</a></button>
     ';
 }
 
@@ -171,7 +171,7 @@ $formularioMarkup = getFormularioMarkup($usuarioData);
       background-color: #2c3e9e;
     }
 
-    button.index a {
+    button.usuarios a {
       color: white;
       text-decoration: none;
     }
