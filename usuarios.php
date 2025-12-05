@@ -5,18 +5,20 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
-header("Cache-Control: no-store");
-
-if (!isset($_SESSION['usuario'])) {
-    header("Location: index.php");
-    exit;
-}
-
 include_once('./libraries/functions.php');
 
 function dump($var){
   echo '<pre>'.print_r($var,1).'</pre>';
 }
+
+function leerPost() {
+    if (isset($_POST['cerrar_sesion'])) {
+        unset($_SESSION['usuario']);
+        header('Location: index.php');
+    }
+}
+
+leerPost();
 
 $usuarios = getUsuarios();
 
@@ -71,15 +73,7 @@ $usuarios = getUsuarios();
 
     </style>
 
-    <script>
-        // Evita que el navegador cargue la página desde su Back-Forward Cache
-        window.addEventListener("pageshow", function (event) {
-            if (event.persisted) {
-                // Si viene del BFCache (al volver atrás), recarga
-                window.location.reload();
-            }
-        });
-    </script>
+    
 </head>
 <body>
 
@@ -124,7 +118,9 @@ $usuarios = getUsuarios();
                 </td>
             </tr>
         <?php endforeach ?>
-        <a class = "btn" href="logout.php">Cerrar Sesión</a>
+        <form action="<?php $_SERVER['PHP_SELF'] ?>" method="post">
+            <button type="submit" class="btn" name="cerrar_sesion">Cerrar Sesión</button>
+        </form>
     </tbody>
 </table>
 </body>

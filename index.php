@@ -8,6 +8,10 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 
+function dump($var){
+  echo '<pre>'.print_r($var,1).'</pre>';
+}
+
 function getLogInMarkup($mensajeError){
     $output = '
     <div class="card">
